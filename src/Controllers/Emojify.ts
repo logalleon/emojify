@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { SlackRequest, SlackResponse } from '../interfaces';
 import { pluck, weightedPluck, randomInt } from "ossuary/dist/lib/Random";
 import config from '../config';
+import characters from '../characters'
 import _ from 'lodash';
 
 const C = ':clear:';
@@ -31,16 +32,17 @@ class Emojify {
     }
     text = text.replace(/['"“”‘’„”«»]/g, '');
     const options = text.split(' ');
-    const isNonAlpha = options[0].replace(/ /g, '').match(/[^a-zA-Z%]/g);
+    const reg = new RegExp(`[^${Object.keys(characters).join('')}]`, 'gi');
+    const invalidCharacters = options[0].replace(/ /g, '').match(reg);
     let response: SlackResponse;
     if (options[0].toLowerCase() === 'help') {
       response = {
         text: this.getHelp(),
         response_type: "ephemeral"
       };
-    } else if (isNonAlpha) {
+    } else if (invalidCharacters) {
       response = {
-        text: 'Emojify only supports alphabetic characters.',
+        text: `Emojify only supports these characters: ${Object.keys(characters)}.\nContribute characters to the project if you'd like more!`,
         response_type: "ephemeral"
       }
     } else {
@@ -62,196 +64,25 @@ class Emojify {
     let row5 = '';
     letters.forEach((letter) => {
       letter = letter.toUpperCase();
-      switch (letter) {
-        case '%':
-          row1 += '....';
-          row2 += '....';
-          row3 += '....';
-          row4 += '....';
-          row5 += '....';
-          break;
-        case 'A':
-          row1 += '.00.';
-          row2 += '0..0';
-          row3 += '0000';
-          row4 += '0..0';
-          row5 += '0..0';
-          break;
-        case 'B':
-          row1 += '000.';
-          row2 += '0..0';
-          row3 += '0000';
-          row4 += '0..0';
-          row5 += '000.';
-          break;
-        case 'C':
-          row1 += '0000';
-          row2 += '0...';
-          row3 += '0...';
-          row4 += '0...';
-          row5 += '0000';
-          break;
-        case 'D':
-          row1 += '000.';
-          row2 += '0..0';
-          row3 += '0..0';
-          row4 += '0..0';
-          row5 += '000.';
-          break;
-        case 'E':
-          row1 += '0000';
-          row2 += '0...';
-          row3 += '000.';
-          row4 += '0...';
-          row5 += '0000';
-          break;
-        case 'F':
-          row1 += '0000';
-          row2 += '0...';
-          row3 += '000.';
-          row4 += '0...';
-          row5 += '0...';
-          break;
-        case 'G':
-          row1 += '0000';
-          row2 += '0...';
-          row3 += '0.00';
-          row4 += '0..0';
-          row5 += '0000';
-          break;
-        case 'H':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '0000';
-          row4 += '0..0';
-          row5 += '0..0';
-          break;
-        case 'I':
-          row1 += '0000';
-          row2 += '.0..';
-          row3 += '.0..';
-          row4 += '.0..';
-          row5 += '0000';
-          break;
-        case 'J':
-          row1 += '...0';
-          row2 += '...0';
-          row3 += '...0';
-          row4 += '0..0';
-          row5 += '.00.';
-          break;
-        case 'K':
-          row1 += '0..0';
-          row2 += '0.0.';
-          row3 += '00..';
-          row4 += '0.0.';
-          row5 += '0..0';
-          break;
-        case 'L':
-          row1 += '0...';
-          row2 += '0...';
-          row3 += '0...';
-          row4 += '0...';
-          row5 += '0000';
-          break;
-        case 'M':
-          row1 += '0..0';
-          row2 += '000.';
-          row3 += '00.0';
-          row4 += '0..0';
-          row5 += '0..0';
-          break;
-        case 'N':
-          row1 += '0..0';
-          row2 += '00.0';
-          row3 += '0.00';
-          row4 += '0..0';
-          row5 += '0..0';
-          break;
-        case 'O':
-          row1 += '0000';
-          row2 += '0..0';
-          row3 += '0..0';
-          row4 += '0..0';
-          row5 += '0000';
-          break;
-        case 'P':
-          row1 += '0000';
-          row2 += '0..0';
-          row3 += '0000';
-          row4 += '0...';
-          row5 += '0...';
-          break;
-        case 'Q':
-          row1 += '0000';
-          row2 += '0..0';
-          row3 += '0..0';
-          row4 += '0.00';
-          row5 += '0000';
-          break;
-        case 'R':
-          row1 += '0000';
-          row2 += '0..0';
-          row3 += '0000';
-          row4 += '0.0.';
-          row5 += '0..0';
-          break;
-        case 'S':
-          row1 += '0000';
-          row2 += '0...';
-          row3 += '0000';
-          row4 += '...0';
-          row5 += '0000';
-          break;
-        case 'T':
-          row1 += '0000';
-          row2 += '.0..';
-          row3 += '.0..';
-          row4 += '.0..';
-          row5 += '.0..';
-          break;
-        case 'U':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '0..0';
-          row4 += '0..0';
-          row5 += '0000';
-          break;
-        case 'V':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '0..0';
-          row4 += '0..0';
-          row5 += '.00.';
-          break;
-        case 'W':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '0.00';
-          row4 += '.000';
-          row5 += '.00.';
-          break;
-        case 'X':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '.00.';
-          row4 += '0..0';
-          row5 += '0..0';
-          break;
-        case 'Y':
-          row1 += '0..0';
-          row2 += '0..0';
-          row3 += '.00.';
-          row4 += '.0..';
-          row5 += '.0..';
-          break;
-        case 'Z':
-          row1 += '0000';
-          row2 += '...0';
-          row3 += '0000';
-          row4 += '0...';
-          row5 += '0000';
-          break;
+      // @ts-ignore
+      if (characters[letter]) {
+        // @ts-ignore
+        row1 += characters[letter].row1;
+        // @ts-ignore
+        row2 += characters[letter].row2;
+        // @ts-ignore
+        row3 += characters[letter].row3;
+        // @ts-ignore
+        row4 += characters[letter].row4;
+        // @ts-ignore
+        row5 += characters[letter].row5;
+      // Unsupported
+      } else {
+        row1 += '00000';
+        row2 += '00000';
+        row3 += '00000';
+        row4 += '00000';
+        row5 += '00000';
       }
       // Spacing
       row1 += '.';
@@ -270,8 +101,8 @@ class Emojify {
 
 
   getHelp (): string {
-    let str = 'EMOJIFY just (JUST) \`\/emojify name :emoji:\` or \`\/emojify "quoted stuff" :emoji:\`';
-    str += '\nplz don\'t use anything other than alpha chars, okay?';
+    let str = 'EMOJIFY just (JUST) \`\/knifefight name :emoji:\` or \`\/knifefight "quoted stuff" :emoji:\`';
+    str += '\nplz don\'t use anything other than support characters, okay?';
     return str;
   }
 
