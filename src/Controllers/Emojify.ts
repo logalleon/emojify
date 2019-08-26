@@ -253,6 +253,12 @@ class Emojify {
           row5 += '0000';
           break;
       }
+      // Spacing
+      row1 += '.';
+      row2 += '.';
+      row3 += '.';
+      row4 += '.';
+      row5 += '.';
     });
     row1 = row1.replace(/\./g, C).replace(/0/g, emoji);
     row2 = row2.replace(/\./g, C).replace(/0/g, emoji);
