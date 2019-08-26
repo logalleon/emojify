@@ -270,7 +270,7 @@ class Emojify {
 
 
   getHelp (): string {
-    let str = 'EMOJIFY just (JUST) \`\/knifefight name :emoji:\` or \`\/knifefight "quoted stuff" :emoji:\`';
+    let str = 'EMOJIFY just (JUST) \`\/emojify name :emoji:\` or \`\/emojify "quoted stuff" :emoji:\`';
     str += '\nplz don\'t use anything other than alpha chars, okay?';
     return str;
   }
