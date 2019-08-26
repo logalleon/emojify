@@ -45,6 +45,11 @@ class Emojify {
         text: `Emojify only supports these characters: ${Object.keys(characters)}.\nContribute characters to the project if you'd like more!`,
         response_type: "ephemeral"
       }
+    } else if (!options[1]) {
+      response = {
+        text: `Looks like you forgot to include an emoji, friendo.`,
+        response_type: "ephemeral"
+      }
     } else {
       response = {
         text: this.emojify(options),
