@@ -22,6 +22,7 @@ class Emojify {
    */
   async handle (req: Request, res: Response): Promise<void> {
     const body: SlackRequest = req.body;
+    console.log(req.body);
     // String all string-quoted
     let { text } = body;
     if (text.match(REG_QUOTES)) {
@@ -32,15 +33,15 @@ class Emojify {
     }
     text = text.replace(/['"“”‘’„”«»]/g, '');
     const options = text.split(' ');
-    const reg = new RegExp(`[^${Object.keys(characters).join('')}]`, 'gi');
-    const invalidCharacters = options[0].replace(/ /g, '').match(reg);
+    // const reg = new RegExp(`[^${Object.keys(characters).join('\\')}]`, 'gi');
+    // const invalidCharacters = options[0].replace(/ /g, '').match(reg);
     let response: SlackResponse;
     if (options[0].toLowerCase() === 'help') {
       response = {
         text: this.getHelp(),
         response_type: "ephemeral"
       };
-    } else if (invalidCharacters) {
+    } else if (false) { // Need a better way of checking these
       response = {
         text: `Emojify only supports these characters: ${Object.keys(characters)}.\nContribute characters to the project if you'd like more!`,
         response_type: "ephemeral"
