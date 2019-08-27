@@ -96,22 +96,22 @@ class Emojify {
       // @ts-ignore
       if (characters[letter]) {
         // @ts-ignore
-        row1 += characters[letter].row1.replace(/0/gi, emojiNum.toString());
+        row1 += characters[letter].row1.replace(/0/gi, 'emoji' + emojiNum.toString());
         // @ts-ignore
-        row2 += characters[letter].row2.replace(/0/gi, emojiNum.toString());
+        row2 += characters[letter].row2.replace(/0/gi, 'emoji' + emojiNum.toString());
         // @ts-ignore
-        row3 += characters[letter].row3.replace(/0/gi, emojiNum.toString());
+        row3 += characters[letter].row3.replace(/0/gi, 'emoji' + emojiNum.toString());
         // @ts-ignore
-        row4 += characters[letter].row4.replace(/0/gi, emojiNum.toString());
+        row4 += characters[letter].row4.replace(/0/gi, 'emoji' + emojiNum.toString());
         // @ts-ignore
-        row5 += characters[letter].row5.replace(/0/gi, emojiNum.toString());
+        row5 += characters[letter].row5.replace(/0/gi, 'emoji' + emojiNum.toString());
       // Unsupported
       } else {
-        row1 += '00000'.replace(/0/gi, emojiNum.toString());
-        row2 += '00000'.replace(/0/gi, emojiNum.toString());
-        row3 += '00000'.replace(/0/gi, emojiNum.toString());
-        row4 += '00000'.replace(/0/gi, emojiNum.toString());
-        row5 += '00000'.replace(/0/gi, emojiNum.toString());
+        row1 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+        row2 += '00000'.replace(/0/gi,'emoji' + emojiNum.toString());
+        row3 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+        row4 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+        row5 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
       }
       // Spacing
       row1 += '.';
@@ -126,7 +126,7 @@ class Emojify {
     row4 = row4.replace(/\./g, C);
     row5 = row5.replace(/\./g, C);
     for (let i = 0; i < options.emojis.length; i++) {
-      let emojiRG = new RegExp(i.toString(), "g");
+      let emojiRG = new RegExp('emoji' + i.toString(), "g");
       row1 = row1.replace(emojiRG, options.emojis[i]);
       row2 = row2.replace(emojiRG,  options.emojis[i]);
       row3 = row3.replace(emojiRG,  options.emojis[i]);
