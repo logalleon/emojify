@@ -49,6 +49,11 @@ class Emojify {
       response = {
         text: `Looks like you forgot to include an emoji, friendo.`,
         response_type: "ephemeral"
+      };
+    } else if (!options[1].match(/:/g)) {
+      response = {
+        text: `ERROR THAT DOESN'T LOOK LIKE AN EMOJI, STAHP IT.`,
+        response_type: "ephemeral"
       }
     } else {
       response = {
