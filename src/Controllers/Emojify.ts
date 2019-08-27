@@ -15,16 +15,7 @@ class Emojify {
     this.emojify = this.emojify.bind(this);
   }
 
-  /**
-   * This does all the route handling and magic stuff happens
-   * @param req 
-   * @param res 
-   */
-  async handle (req: Request, res: Response): Promise<void> {
-    const body: SlackRequest = req.body;
-    console.log(req.body);
-    // String all string-quoted
-    let { text } = body;
+  parseRequest (text: string): string[] {
     if (text.match(REG_QUOTES)) {
       const matches: any = text.match(REG_QUOTES);
       matches.forEach((match: string) => {
@@ -35,6 +26,11 @@ class Emojify {
     const options = text.split(' ');
     // const reg = new RegExp(`[^${Object.keys(characters).join('\\')}]`, 'gi');
     // const invalidCharacters = options[0].replace(/ /g, '').match(reg);
+    return options;
+  }
+
+  process (text: string): SlackResponse {
+    const options = this.parseRequest(text);
     let response: SlackResponse;
     if (options[0].toLowerCase() === 'help') {
       response = {
@@ -62,6 +58,18 @@ class Emojify {
         response_type: "in_channel"
       };
     }
+    return response;
+  }
+  /**
+   * This does all the route handling and magic stuff happens
+   * @param req 
+   * @param res 
+   */
+  async handle (req: Request, res: Response): Promise<void> {
+    const body: SlackRequest = req.body;
+    // String all string-quoted
+    let { text } = body;
+    var response = this.process(text);
     res.json(response);
   }
 
