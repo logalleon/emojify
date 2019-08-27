@@ -18,7 +18,7 @@ class Emojify {
   parseRequest (text: string): MessageOptions {
     var has_illegal_characters = false;
     var emojis = text.match(/(\:[^ :]*\:)/gm);
-    var messsageText = text.replace(/(\:[^ ]*\:)/gm, '').replace(/  /gm, ' ').replace(/ /gm, '%').trim();
+    var messsageText = text.replace(/(\:[^ ]*\:)/gm, '').replace(/  /gm, ' ').trim().replace(/ /gm, '%');
     var available_characters = Object.keys(characters);
     const REGEX_SPECIAL_CHARS = ['.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'];
     available_characters.forEach((o, index) => {
@@ -85,9 +85,14 @@ class Emojify {
     let row3 = '';
     let row4 = '';
     let row5 = '';
-    letters.forEach((letter, index) => {
+    let index = 0;
+    letters.forEach((letter) => {
       letter = letter.toUpperCase();
       let emojiNum = index % options.emojis.length;
+      //only change on non-spaces
+      if (letter !== '%') {
+        index += 1;
+      }
       // @ts-ignore
       if (characters[letter]) {
         // @ts-ignore
