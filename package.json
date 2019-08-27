@@ -1,20 +1,22 @@
 {
-  "name": "armory",
+  "name": "emojify",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "develop": "nodemon dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "www": "cp -r src/www/ dist/www"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/axios": "^0.14.0",
     "@types/dotenv": "^6.1.0",
     "@types/express": "^4.16.0",
     "@types/lodash": "^4.14.123",
     "@types/slack-node": "^0.1.2",
+    "axios": "^0.19.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",

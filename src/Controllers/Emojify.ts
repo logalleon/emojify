@@ -4,6 +4,7 @@ import { pluck, weightedPluck, randomInt } from "ossuary/dist/lib/Random";
 import config from '../config';
 import characters from '../characters'
 import _ from 'lodash';
+import axios from 'axios';
 
 const C = ':clear:';
 const REG_QUOTES = /['"“”‘’„”«»].*?['"“”‘’„”«»]/g;
@@ -138,9 +139,33 @@ class Emojify {
 
 
   getHelp (): string {
-    let str = 'EMOJIFY just (JUST) \`\/emotify the text you want :emoji:\`';
-    str += '\nplz don\'t use anything other than support characters, okay?';
+    let str = 'EMOJIFY just (JUST) \`\/emojify the text you want :emoji:\`';
+    str += '\nplz don\'t use anything other than supported characters, okay?';
     return str;
+  }
+
+  async auth (req: Request, res: Response) {
+
+    const { query } = req;
+
+    if (!query || !query.code) {
+      throw new Error('no-code');
+    }
+
+    // @ts-ignore
+    const body = new URLSearchParams();
+    body.append('client_id', config.CLIENT_ID);
+    body.append('client_secret', config.CLIENT_SECRET);
+    body.append('code', query.code);
+    body.append('redirect_uri', config.OAUTH_REDIRECT_URI);
+
+    axios.post('https://slack.com/api/oauth.access', body)
+      .then((response) => {
+        config.OAUTH_REDIRECT_URI ? res.redirect(config.OAUTH_REDIRECT_URI) : res.sendStatus(200);
+      })
+      .catch((e) => {
+        res.sendStatus(401);
+      });
   }
 
 }
