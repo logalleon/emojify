@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { SlackRequest, SlackResponse } from '../interfaces';
+import { SlackRequest, SlackResponse, MessageOptions } from '../interfaces';
 import { pluck, weightedPluck, randomInt } from "ossuary/dist/lib/Random";
 import config from '../config';
 import characters from '../characters'
@@ -15,43 +15,47 @@ class Emojify {
     this.emojify = this.emojify.bind(this);
   }
 
-  parseRequest (text: string): string[] {
-    if (text.match(REG_QUOTES)) {
-      const matches: any = text.match(REG_QUOTES);
-      matches.forEach((match: string) => {
-        text = text.replace(match, match.replace(/ /g, '%'))
-      });
+  parseRequest (text: string): MessageOptions {
+    var has_illegal_characters = false;
+    var emojis = text.match(/(\:[^ :]*\:)/gm);
+    var messsageText = text.replace(/(\:[^ ]*\:)/gm, '').replace(/  /gm, ' ').replace(/ /gm, '%').trim();
+    var available_characters = Object.keys(characters);
+    const REGEX_SPECIAL_CHARS = ['.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'];
+    available_characters.forEach((o, index) => {
+      if (REGEX_SPECIAL_CHARS.indexOf(o) > -1) {
+        available_characters[index] = "\\" + o;
+      }
+    });
+    const reg = new RegExp(`[^${available_characters.join('')}]`, 'gi');
+    const invalidCharacters = messsageText.replace(/ /g, '').match(reg);
+    if (invalidCharacters) {
+      has_illegal_characters = true;
     }
-    text = text.replace(/['"“”‘’„”«»]/g, '');
-    const options = text.split(' ');
-    // const reg = new RegExp(`[^${Object.keys(characters).join('\\')}]`, 'gi');
-    // const invalidCharacters = options[0].replace(/ /g, '').match(reg);
-    return options;
+    return {
+      text: messsageText,
+      has_illegal_characters: has_illegal_characters,
+      emojis: emojis ? emojis : []
+    };
   }
 
   process (text: string): SlackResponse {
     const options = this.parseRequest(text);
     let response: SlackResponse;
-    if (options[0].toLowerCase() === 'help') {
+    if (options.text.toLowerCase() === 'help' && options.emojis.length == 0) {
       response = {
         text: this.getHelp(),
         response_type: "ephemeral"
       };
-    } else if (false) { // Need a better way of checking these
+    } else if (options.has_illegal_characters) { // Need a better way of checking these
       response = {
         text: `Emojify only supports these characters: ${Object.keys(characters)}.\nContribute characters to the project if you'd like more!`,
         response_type: "ephemeral"
       }
-    } else if (!options[1]) {
+    } else if (options.emojis.length == 0) {
       response = {
         text: `Looks like you forgot to include an emoji, friendo.`,
         response_type: "ephemeral"
       };
-    } else if (!options[1].match(/:/g)) {
-      response = {
-        text: `ERROR THAT DOESN'T LOOK LIKE AN EMOJI, STAHP IT.`,
-        response_type: "ephemeral"
-      }
     } else {
       response = {
         text: this.emojify(options),
@@ -69,39 +73,40 @@ class Emojify {
     const body: SlackRequest = req.body;
     // String all string-quoted
     let { text } = body;
-    var response = this.process(text);
+    let response = this.process(text);
     res.json(response);
   }
 
-  emojify (options: string[]): string {
-    const [text, emoji] = options;
+  emojify (options: {text: string, emojis: string[]}): string {
+    var text = options.text;
     const letters = text.split('');
     let row1 = '';
     let row2 = '';
     let row3 = '';
     let row4 = '';
     let row5 = '';
-    letters.forEach((letter) => {
+    letters.forEach((letter, index) => {
       letter = letter.toUpperCase();
+      let emojiNum = index % options.emojis.length;
       // @ts-ignore
       if (characters[letter]) {
         // @ts-ignore
-        row1 += characters[letter].row1;
+        row1 += characters[letter].row1.replace(/0/gi, emojiNum.toString());
         // @ts-ignore
-        row2 += characters[letter].row2;
+        row2 += characters[letter].row2.replace(/0/gi, emojiNum.toString());
         // @ts-ignore
-        row3 += characters[letter].row3;
+        row3 += characters[letter].row3.replace(/0/gi, emojiNum.toString());
         // @ts-ignore
-        row4 += characters[letter].row4;
+        row4 += characters[letter].row4.replace(/0/gi, emojiNum.toString());
         // @ts-ignore
-        row5 += characters[letter].row5;
+        row5 += characters[letter].row5.replace(/0/gi, emojiNum.toString());
       // Unsupported
       } else {
-        row1 += '00000';
-        row2 += '00000';
-        row3 += '00000';
-        row4 += '00000';
-        row5 += '00000';
+        row1 += '00000'.replace(/0/gi, emojiNum.toString());
+        row2 += '00000'.replace(/0/gi, emojiNum.toString());
+        row3 += '00000'.replace(/0/gi, emojiNum.toString());
+        row4 += '00000'.replace(/0/gi, emojiNum.toString());
+        row5 += '00000'.replace(/0/gi, emojiNum.toString());
       }
       // Spacing
       row1 += '.';
@@ -110,17 +115,25 @@ class Emojify {
       row4 += '.';
       row5 += '.';
     });
-    row1 = row1.replace(/\./g, C).replace(/0/g, emoji);
-    row2 = row2.replace(/\./g, C).replace(/0/g, emoji);
-    row3 = row3.replace(/\./g, C).replace(/0/g, emoji);
-    row4 = row4.replace(/\./g, C).replace(/0/g, emoji);
-    row5 = row5.replace(/\./g, C).replace(/0/g, emoji);
+    row1 = row1.replace(/\./g, C);
+    row2 = row2.replace(/\./g, C);
+    row3 = row3.replace(/\./g, C);
+    row4 = row4.replace(/\./g, C);
+    row5 = row5.replace(/\./g, C);
+    for (let i = 0; i < options.emojis.length; i++) {
+      let emojiRG = new RegExp(i.toString(), "g");
+      row1 = row1.replace(emojiRG, options.emojis[i]);
+      row2 = row2.replace(emojiRG,  options.emojis[i]);
+      row3 = row3.replace(emojiRG,  options.emojis[i]);
+      row4 = row4.replace(emojiRG,  options.emojis[i]);
+      row5 = row5.replace(emojiRG, options.emojis[i]);
+    }
     return `${row1}\n${row2}\n${row3}\n${row4}\n${row5}`;
   }
 
 
   getHelp (): string {
-    let str = 'EMOJIFY just (JUST) \`\/knifefight name :emoji:\` or \`\/knifefight "quoted stuff" :emoji:\`';
+    let str = 'EMOJIFY just (JUST) \`\/emotify the text you want :emoji:\`';
     str += '\nplz don\'t use anything other than support characters, okay?';
     return str;
   }

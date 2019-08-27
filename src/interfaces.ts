@@ -26,4 +26,9 @@ interface SlackResponse {
   attachments?: Attachment[]
 }
 
-export { SlackRequest, Attachment, SlackResponse }
+interface MessageOptions {
+  text: string,
+  has_illegal_characters: boolean,
+  emojis: string[]
+}
+export { SlackRequest, Attachment, SlackResponse, MessageOptions }
