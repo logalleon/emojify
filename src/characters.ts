@@ -1,4 +1,10 @@
-export default {
+import { RowOutput } from "./interfaces";
+
+interface CharacterMap {
+  [char: string]: RowOutput
+}
+
+const characters: CharacterMap = {
   'A': {
     row1: '.00.',
     row2: '0..0',
@@ -309,3 +315,5 @@ export default {
     row5: '.000.',
   },
 }
+
+export default characters;

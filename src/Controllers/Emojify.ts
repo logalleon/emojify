@@ -81,11 +81,11 @@ class Emojify {
 
   emojify (options: {text: string, emojis: string[]}): string {
     var text = options.text;
-    let rowBreaks = [];
+    let rowBreaks: number[] = [];
     const words = text.split('%');
     let currentLine = "";
-    let test = [];
-    let splitLoc = 0;
+    let test: any = [];
+    let splitLoc: number = 0;
     words.forEach((word) => {
       if (currentLine.length == 0) {
         currentLine = word;
@@ -105,10 +105,9 @@ class Emojify {
       }
       rowBreaks.push(splitLoc)
     }
-console.log(test);
     const letters = text.split('');
 
-    let rows = [];
+    let rows: RowOutput[] = [];
 
     let row1 = '';
     let row2 = '';
@@ -138,17 +137,11 @@ console.log(test);
         row5 = "";
         rows.push(newRow);
       } else {
-        // @ts-ignore
         if (characters[letter]) {
-          // @ts-ignore
           row1 += characters[letter].row1.replace(/0/gi, 'emoji' + emojiNum.toString());
-          // @ts-ignore
           row2 += characters[letter].row2.replace(/0/gi, 'emoji' + emojiNum.toString());
-          // @ts-ignore
           row3 += characters[letter].row3.replace(/0/gi, 'emoji' + emojiNum.toString());
-          // @ts-ignore
           row4 += characters[letter].row4.replace(/0/gi, 'emoji' + emojiNum.toString());
-          // @ts-ignore
           row5 += characters[letter].row5.replace(/0/gi, 'emoji' + emojiNum.toString());
         // Unsupported
         } else {
