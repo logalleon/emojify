@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { SlackRequest, SlackResponse, MessageOptions } from '../interfaces';
+import { SlackRequest, SlackResponse, MessageOptions, RowOutput } from '../interfaces';
 import { pluck, weightedPluck, randomInt } from "ossuary/dist/lib/Random";
 import config from '../config';
 import characters from '../characters'
@@ -8,6 +8,7 @@ import axios from 'axios';
 
 const C = ':clear:';
 const REG_QUOTES = /['"“”‘’„”«»].*?['"“”‘’„”«»]/g;
+const CHARS_PER_ROW = 5;
 
 class Emojify {
 
@@ -81,6 +82,10 @@ class Emojify {
   emojify (options: {text: string, emojis: string[]}): string {
     var text = options.text;
     const letters = text.split('');
+
+    let letterCounter = 1;
+    let rows = [];
+
     let row1 = '';
     let row2 = '';
     let row3 = '';
@@ -120,21 +125,58 @@ class Emojify {
       row3 += '.';
       row4 += '.';
       row5 += '.';
+
+      if (letterCounter < CHARS_PER_ROW) {
+        letterCounter += 1;
+      } else {
+        const newRow = {
+          row1,
+          row2,
+          row3,
+          row4,
+          row5
+        };
+        row1= "";
+        row2= "";
+        row3 = "";
+        row4 = "";
+        row5 = "";
+        rows.push(newRow);
+        letterCounter = 1;
+      }
+
     });
-    row1 = row1.replace(/\./g, C);
-    row2 = row2.replace(/\./g, C);
-    row3 = row3.replace(/\./g, C);
-    row4 = row4.replace(/\./g, C);
-    row5 = row5.replace(/\./g, C);
-    for (let i = 0; i < options.emojis.length; i++) {
-      let emojiRG = new RegExp('emoji' + i.toString(), "g");
-      row1 = row1.replace(emojiRG, options.emojis[i]);
-      row2 = row2.replace(emojiRG,  options.emojis[i]);
-      row3 = row3.replace(emojiRG,  options.emojis[i]);
-      row4 = row4.replace(emojiRG,  options.emojis[i]);
-      row5 = row5.replace(emojiRG, options.emojis[i]);
+    const remainingRow = {
+      row1,
+      row2,
+      row3,
+      row4,
+      row5
+    };
+    rows.push(remainingRow);
+    let multiLines = "";
+    console.log("number or rows: ", rows.length);
+    for (let numRow = 0; numRow < rows.length; numRow++) {
+      rows[numRow].row1 = rows[numRow].row1.replace(/\./g, C);
+      rows[numRow].row2 = rows[numRow].row2.replace(/\./g, C);
+      rows[numRow].row3 = rows[numRow].row3.replace(/\./g, C);
+      rows[numRow].row4 = rows[numRow].row4.replace(/\./g, C);
+      rows[numRow].row5 = rows[numRow].row5.replace(/\./g, C);
+      for (let i = 0; i < options.emojis.length; i++) {
+        let emojiRG = new RegExp('emoji' + i.toString(), "g");
+        rows[numRow].row1 = rows[numRow].row1.replace(emojiRG, options.emojis[i]);
+        rows[numRow].row2 = rows[numRow].row2.replace(emojiRG,  options.emojis[i]);
+        rows[numRow].row3 = rows[numRow].row3.replace(emojiRG,  options.emojis[i]);
+        rows[numRow].row4 = rows[numRow].row4.replace(emojiRG,  options.emojis[i]);
+        rows[numRow].row5 = rows[numRow].row5.replace(emojiRG, options.emojis[i]);
+      }
+      multiLines += `${rows[numRow].row1}\n${rows[numRow].row2}\n${rows[numRow].row3}\n${rows[numRow].row4}\n${rows[numRow].row5}`;
+      if (numRow < (rows.length -1)) {
+        multiLines += '\n';
+      }
     }
-    return `${row1}\n${row2}\n${row3}\n${row4}\n${row5}`;
+
+    return multiLines;
   }
 
 

@@ -31,4 +31,13 @@ interface MessageOptions {
   has_illegal_characters: boolean,
   emojis: string[]
 }
-export { SlackRequest, Attachment, SlackResponse, MessageOptions }
+
+interface RowOutput {
+  row1: string,
+  row2: string,
+  row3: string,
+  row4: string,
+  row5: string,
+}
+
+export { SlackRequest, Attachment, SlackResponse, MessageOptions, RowOutput1 }
