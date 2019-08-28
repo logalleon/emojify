@@ -81,9 +81,33 @@ class Emojify {
 
   emojify (options: {text: string, emojis: string[]}): string {
     var text = options.text;
+    let rowBreaks = [];
+    const words = text.split('%');
+    let currentLine = "";
+    let test = [];
+    let splitLoc = 0;
+    words.forEach((word) => {
+      if (currentLine.length == 0) {
+        currentLine = word;
+      } else {
+        currentLine += ' ' + word;
+      }
+      if (currentLine.length >= CHARS_PER_ROW) {
+        test.push(currentLine);
+        currentLine = "";
+      }
+    });
+    for (let testIndex = 0; testIndex < test.length -1; testIndex++) {
+      if (splitLoc == 0) {
+        splitLoc = test[testIndex].length;
+      } else {
+        splitLoc += test[testIndex].length + 1;
+      }
+      rowBreaks.push(splitLoc)
+    }
+console.log(test);
     const letters = text.split('');
 
-    let letterCounter = 1;
     let rows = [];
 
     let row1 = '';
@@ -92,43 +116,14 @@ class Emojify {
     let row4 = '';
     let row5 = '';
     let index = 0;
-    letters.forEach((letter) => {
+    letters.forEach((letter, letterIndex) => {
       letter = letter.toUpperCase();
       let emojiNum = index % options.emojis.length;
       //only change on non-spaces
       if (letter !== '%') {
         index += 1;
       }
-      // @ts-ignore
-      if (characters[letter]) {
-        // @ts-ignore
-        row1 += characters[letter].row1.replace(/0/gi, 'emoji' + emojiNum.toString());
-        // @ts-ignore
-        row2 += characters[letter].row2.replace(/0/gi, 'emoji' + emojiNum.toString());
-        // @ts-ignore
-        row3 += characters[letter].row3.replace(/0/gi, 'emoji' + emojiNum.toString());
-        // @ts-ignore
-        row4 += characters[letter].row4.replace(/0/gi, 'emoji' + emojiNum.toString());
-        // @ts-ignore
-        row5 += characters[letter].row5.replace(/0/gi, 'emoji' + emojiNum.toString());
-      // Unsupported
-      } else {
-        row1 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
-        row2 += '00000'.replace(/0/gi,'emoji' + emojiNum.toString());
-        row3 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
-        row4 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
-        row5 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
-      }
-      // Spacing
-      row1 += '.';
-      row2 += '.';
-      row3 += '.';
-      row4 += '.';
-      row5 += '.';
-
-      if (letterCounter < CHARS_PER_ROW) {
-        letterCounter += 1;
-      } else {
+      if (rowBreaks.indexOf(letterIndex) > -1) {
         const newRow = {
           row1,
           row2,
@@ -142,9 +137,34 @@ class Emojify {
         row4 = "";
         row5 = "";
         rows.push(newRow);
-        letterCounter = 1;
+      } else {
+        // @ts-ignore
+        if (characters[letter]) {
+          // @ts-ignore
+          row1 += characters[letter].row1.replace(/0/gi, 'emoji' + emojiNum.toString());
+          // @ts-ignore
+          row2 += characters[letter].row2.replace(/0/gi, 'emoji' + emojiNum.toString());
+          // @ts-ignore
+          row3 += characters[letter].row3.replace(/0/gi, 'emoji' + emojiNum.toString());
+          // @ts-ignore
+          row4 += characters[letter].row4.replace(/0/gi, 'emoji' + emojiNum.toString());
+          // @ts-ignore
+          row5 += characters[letter].row5.replace(/0/gi, 'emoji' + emojiNum.toString());
+        // Unsupported
+        } else {
+          row1 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+          row2 += '00000'.replace(/0/gi,'emoji' + emojiNum.toString());
+          row3 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+          row4 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+          row5 += '00000'.replace(/0/gi, 'emoji' + emojiNum.toString());
+        }
+        // Spacing
+        row1 += '.';
+        row2 += '.';
+        row3 += '.';
+        row4 += '.';
+        row5 += '.';
       }
-
     });
     const remainingRow = {
       row1,
@@ -155,7 +175,6 @@ class Emojify {
     };
     rows.push(remainingRow);
     let multiLines = "";
-    console.log("number or rows: ", rows.length);
     for (let numRow = 0; numRow < rows.length; numRow++) {
       rows[numRow].row1 = rows[numRow].row1.replace(/\./g, C);
       rows[numRow].row2 = rows[numRow].row2.replace(/\./g, C);

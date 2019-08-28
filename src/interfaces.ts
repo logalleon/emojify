@@ -40,4 +40,4 @@ interface RowOutput {
   row5: string,
 }
 
-export { SlackRequest, Attachment, SlackResponse, MessageOptions, RowOutput1 }
+export { SlackRequest, Attachment, SlackResponse, MessageOptions, RowOutput }
