@@ -19,7 +19,7 @@ class Emojify {
 
   parseRequest (text: string): MessageOptions {
     var has_illegal_characters = false;
-    var emojis = text.match(/(\:[^ :]*\:)/gm);
+    var emojis = text.match(/(\:[^ :]*\:(\:skin-tone-\d\:))|(\:[^ :]*\:)/gm);
     var messsageText = text.replace(/(\:[^ ]*\:)/gm, '').replace(/  /gm, ' ').trim().replace(/ /gm, '%');
     var available_characters = Object.keys(characters);
     const REGEX_SPECIAL_CHARS = ['.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'];

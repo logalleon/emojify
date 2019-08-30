@@ -5,7 +5,7 @@ var exampleString = "knife :knife1: :knife2: :knife3: :knife4: :knife5:";
 //  console.log(emoji.parseRequest(exampleString));
 // console.log(emoji.process(exampleString));
 //               012345678
-exampleString = "dolla dolla mimault yall :coin:";
+exampleString = "dolla dolla mimault yall :thumbsup::skin-tone-1: :no:";
 // console.log(emoji.parseRequest(exampleString));
 console.log(emoji.process(exampleString));
 // exampleString = "hello :no::killer: you jerk ";
