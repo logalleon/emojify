@@ -184,7 +184,7 @@ class Emojify {
       }
       multiLines += `${rows[numRow].row1}\n${rows[numRow].row2}\n${rows[numRow].row3}\n${rows[numRow].row4}\n${rows[numRow].row5}`;
       if (numRow < (rows.length -1)) {
-        multiLines += '\n';
+        multiLines += '\n:clear:\n';
       }
     }
 
