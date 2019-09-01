@@ -203,22 +203,22 @@ class Emojify {
     const { query } = req;
 
     if (!query || !query.code) {
-      throw new Error('no-code');
+      return res.send('Error: no code present');
     }
 
-    // @ts-ignore
-    const body = new URLSearchParams();
-    body.append('client_id', config.CLIENT_ID);
-    body.append('client_secret', config.CLIENT_SECRET);
-    body.append('code', query.code);
-    body.append('redirect_uri', config.OAUTH_REDIRECT_URI);
+    const body = {
+      'client_id': config.CLIENT_ID,
+      'client_secret': config.CLIENT_SECRET,
+      'code': query.code,
+      'redirect_uri': config.OAUTH_REDIRECT_URI
+    }
 
     axios.post('https://slack.com/api/oauth.access', body)
       .then((response) => {
         config.OAUTH_REDIRECT_URI ? res.redirect(config.OAUTH_REDIRECT_URI) : res.sendStatus(200);
       })
       .catch((e) => {
-        res.sendStatus(401);
+        res.send('Error Authenticating OAUTH');
       });
   }
 
