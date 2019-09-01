@@ -19,7 +19,7 @@ class Emojify {
 
   parseRequest (text: string): MessageOptions {
     var has_illegal_characters = false;
-    var emojis = text.match(/(\:[^ :]*\:)/gm);
+    var emojis = text.match(/(\:[^ :]*\:(\:skin-tone-\d\:))|(\:[^ :]*\:)/gm);
     var messsageText = text.replace(/(\:[^ ]*\:)/gm, '').replace(/  /gm, ' ').trim().replace(/ /gm, '%');
     var available_characters = Object.keys(characters);
     const REGEX_SPECIAL_CHARS = ['.', '\\', '+', '*', '?', '[', '^', ']', '$', '(', ')', '{', '}', '=', '!', '<', '>', '|', ':', '-'];
@@ -87,16 +87,20 @@ class Emojify {
     let test: any = [];
     let splitLoc: number = 0;
     words.forEach((word) => {
+      console.log(word);
       if (currentLine.length == 0) {
         currentLine = word;
       } else {
         currentLine += ' ' + word;
       }
-      if (currentLine.length >= CHARS_PER_ROW) {
+      if (word == '\n' || currentLine.length >= CHARS_PER_ROW) {
         test.push(currentLine);
         currentLine = "";
       }
     });
+    if (currentLine.length > 0) {
+      test.push(currentLine);
+    }
     for (let testIndex = 0; testIndex < test.length -1; testIndex++) {
       if (splitLoc == 0) {
         splitLoc = test[testIndex].length;
@@ -105,6 +109,7 @@ class Emojify {
       }
       rowBreaks.push(splitLoc)
     }
+    console.log(test, rowBreaks);
     const letters = text.split('');
 
     let rows: RowOutput[] = [];
@@ -184,7 +189,7 @@ class Emojify {
       }
       multiLines += `${rows[numRow].row1}\n${rows[numRow].row2}\n${rows[numRow].row3}\n${rows[numRow].row4}\n${rows[numRow].row5}`;
       if (numRow < (rows.length -1)) {
-        multiLines += '\n';
+        multiLines += '\n:clear:\n';
       }
     }
 
