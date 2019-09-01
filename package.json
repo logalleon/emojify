@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "develop": "nodemon dist/index.js",
-    "www": "cp -r src/www/ dist/www"
+    "www": "rm -rf dist/www && cp -r src/www/ dist/www"
   },
   "keywords": [],
   "author": "",
