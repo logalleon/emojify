@@ -221,9 +221,11 @@ class Emojify {
 
     axios.post('https://slack.com/api/oauth.access', querystring.stringify(body))
       .then((response) => {
+        console.log('auth response', response);
         config.OAUTH_REDIRECT_URI ? res.redirect(config.OAUTH_REDIRECT_URI) : res.sendStatus(200);
       })
       .catch((e) => {
+        console.error('auth error', e);
         res.send('Error Authenticating OAUTH');
       });
   }
