@@ -5,6 +5,7 @@ import config from '../config';
 import characters from '../characters'
 import _ from 'lodash';
 import axios from 'axios';
+import querystring from 'querystring';
 
 const C = ':clear:';
 const REG_QUOTES = /['"“”‘’„”«»].*?['"“”‘’„”«»]/g;
@@ -218,7 +219,7 @@ class Emojify {
       'redirect_uri': config.OAUTH_REDIRECT_URI
     }
 
-    axios.post('https://slack.com/api/oauth.access', body)
+    axios.post('https://slack.com/api/oauth.access', querystring.stringify(body))
       .then((response) => {
         config.OAUTH_REDIRECT_URI ? res.redirect(config.OAUTH_REDIRECT_URI) : res.sendStatus(200);
       })
