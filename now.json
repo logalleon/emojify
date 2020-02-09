@@ -1,0 +1,15 @@
+{
+  "scope": "tft",
+  "version": 2,
+  "env": {
+    "CLIENT_ID": "@emojify-client-id",
+    "CLIENT_SECRET": "@emojify-client-secret",
+    "APP_URL": "https://emojify.352.dev"
+  },
+  "build": {
+    "env": {
+      "CLIENT_ID": "@emojify-client-id",
+      "APP_URL": "https://emojify.352.dev"
+    }
+  }
+}

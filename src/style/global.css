@@ -1,0 +1,14 @@
+body {
+  font-family: 'Homemade Apple', cursive;
+  background: url(https://i.pinimg.com/474x/8a/39/6b/8a396ba82d5c7149bc3d9a36d2978ed4.jpg) repeat;
+}
+
+.example {
+  line-height: 1;
+  white-space: pre-wrap;
+}
+
+.example img {
+  width: 16px;
+  height: 16px;
+}
