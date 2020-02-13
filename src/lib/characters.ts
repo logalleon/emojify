@@ -1,186 +1,186 @@
-import { RowOutput } from "./interfaces";
+import { RowOutput } from './interfaces';
 
 interface CharacterMap {
-  [char: string]: RowOutput
+  [char: string]: RowOutput;
 }
 
 const characters: CharacterMap = {
-  'A': {
+  A: {
     row1: '.00.',
     row2: '0..0',
     row3: '0000',
     row4: '0..0',
     row5: '0..0',
   },
-  'B': {
+  B: {
     row1: '000.',
     row2: '0..0',
     row3: '000.',
     row4: '0..0',
     row5: '000.',
   },
-  'C': {
+  C: {
     row1: '0000',
     row2: '0...',
     row3: '0...',
     row4: '0...',
     row5: '0000',
   },
-  'D': {
+  D: {
     row1: '000.',
     row2: '0..0',
     row3: '0..0',
     row4: '0..0',
     row5: '000.',
   },
-  'E': {
+  E: {
     row1: '0000',
     row2: '0...',
     row3: '000.',
     row4: '0...',
     row5: '0000',
   },
-  'F': {
+  F: {
     row1: '0000',
     row2: '0...',
     row3: '000.',
     row4: '0...',
     row5: '0...',
   },
-  'G': {
+  G: {
     row1: '0000',
     row2: '0...',
     row3: '0.00',
     row4: '0..0',
     row5: '0000',
   },
-  'H': {
+  H: {
     row1: '0..0',
     row2: '0..0',
     row3: '0000',
     row4: '0..0',
     row5: '0..0',
   },
-  'I': {
+  I: {
     row1: '000',
     row2: '.0.',
     row3: '.0.',
     row4: '.0.',
     row5: '000',
   },
-  'J': {
+  J: {
     row1: '...0',
     row2: '...0',
     row3: '...0',
     row4: '0..0',
     row5: '.00.',
   },
-  'K': {
+  K: {
     row1: '0..0',
     row2: '0.0.',
     row3: '00..',
     row4: '0.0.',
     row5: '0..0',
   },
-  'L': {
+  L: {
     row1: '0..',
     row2: '0..',
     row3: '0..',
     row4: '0..',
     row5: '000',
   },
-  'M': {
+  M: {
     row1: '.0.0.',
     row2: '0.0.0',
     row3: '0...0',
     row4: '0...0',
     row5: '0...0',
   },
-  'N': {
+  N: {
     row1: '0..0',
     row2: '00.0',
     row3: '0.00',
     row4: '0..0',
     row5: '0..0',
   },
-  'O': {
+  O: {
     row1: '0000',
     row2: '0..0',
     row3: '0..0',
     row4: '0..0',
     row5: '0000',
   },
-  'P': {
+  P: {
     row1: '0000',
     row2: '0..0',
     row3: '0000',
     row4: '0...',
     row5: '0...',
   },
-  'Q': {
+  Q: {
     row1: '0000',
     row2: '0..0',
     row3: '0..0',
     row4: '0.00',
     row5: '0000',
   },
-  'R': {
+  R: {
     row1: '0000',
     row2: '0..0',
     row3: '0000',
     row4: '0.0.',
     row5: '0..0',
   },
-  'S': {
+  S: {
     row1: '0000',
     row2: '0...',
     row3: '0000',
     row4: '...0',
     row5: '0000',
   },
-  'T': {
+  T: {
     row1: '0000',
     row2: '.0..',
     row3: '.0..',
     row4: '.0..',
     row5: '.0..',
   },
-  'U': {
+  U: {
     row1: '0..0',
     row2: '0..0',
     row3: '0..0',
     row4: '0..0',
     row5: '0000',
   },
-  'V': {
+  V: {
     row1: '0..0',
     row2: '0..0',
     row3: '0..0',
     row4: '0..0',
     row5: '.00.',
   },
-  'W': {
+  W: {
     row1: '0...0',
     row2: '0...0',
     row3: '0...0',
     row4: '0.0.0',
     row5: '.0.0.',
   },
-  'X': {
+  X: {
     row1: '0..0',
     row2: '0..0',
     row3: '.00.',
     row4: '0..0',
     row5: '0..0',
   },
-  'Y': {
+  Y: {
     row1: '0..0',
     row2: '0..0',
     row3: '.00.',
     row4: '.0..',
     row5: '.0..',
   },
-  'Z': {
+  Z: {
     row1: '0000',
     row2: '...0',
     row3: '..0.',
@@ -230,7 +230,7 @@ const characters: CharacterMap = {
     row4: '...',
     row5: '...',
   },
-  '\'': {
+  "'": {
     row1: '0',
     row2: '0',
     row3: '.',
@@ -314,6 +314,6 @@ const characters: CharacterMap = {
     row4: '00..0',
     row5: '.000.',
   },
-}
+};
 
 export default characters;
